@@ -12,14 +12,17 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { useState } from "react";
 import Clientes from "../clientes/Clientes";
-import { ModalClientProvider } from "../clientes/context/modalContext";
+import Nota from "../nota/Nota";
+import { DataContext } from "../context/DataContext";
+import { useContext } from "react";
 
 const drawerWidth = 240;
-const DEFAULT_MENU = [0, "Clientes"];
+
 export default function DrawerMenu() {
-  const [menuName, setMenuName] = useState(DEFAULT_MENU);
+  const modalClientContext: any = useContext(DataContext);
+
+  console.log(modalClientContext.menuName);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -29,7 +32,7 @@ export default function DrawerMenu() {
       >
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            {menuName[1]}
+            {modalClientContext.menuName[1]}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -48,12 +51,13 @@ export default function DrawerMenu() {
         <Toolbar />
         <Divider />
         <List>
-          {["Clientes", "Estoque", "Nota de Serviço"].map((text, index) => (
+          {["Clientes", "Nota", "Nota de Serviço"].map((text, index) => (
             <ListItem
               button
               key={text}
               onClick={() => {
-                setMenuName([index, text]);
+                modalClientContext.setMenuName([index, text]);
+                modalClientContext.setSelectedRow(undefined);
               }}
             >
               <ListItemIcon>
@@ -64,15 +68,19 @@ export default function DrawerMenu() {
           ))}
         </List>
       </Drawer>
-      <ModalClientProvider>
-        <Box
-          component="main"
-          sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
-        >
-          <Toolbar />
-          {menuName[0] === 0 ? <Clientes /> : <></>}
-        </Box>
-      </ModalClientProvider>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+      >
+        <Toolbar />
+        {modalClientContext.menuName[0] === 0 ? (
+          <Clientes />
+        ) : modalClientContext.menuName[0] === 1 ? (
+          <Nota />
+        ) : (
+          <></>
+        )}{" "}
+      </Box>
     </Box>
   );
 }

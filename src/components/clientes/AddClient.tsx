@@ -2,11 +2,11 @@ import * as React from "react";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import ModalClient from "./ModalClient";
-import { ModalClientContext } from "./context/modalContext";
+import { DataContext } from "../context/DataContext";
 import { useContext } from "react";
 
 const AddClient: React.FC = () => {
-  const modalClientContext: any = useContext(ModalClientContext);
+  const modalClientContext: any = useContext(DataContext);
 
   const handleOpen = () => modalClientContext.setOpen(true);
 
