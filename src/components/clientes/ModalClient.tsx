@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Button, Divider, TextField } from "@mui/material";
 import { useEffect } from "react";
-import { writeUserData } from "../../firebase/realTimeFunctions";
+import { writeUserDataClient } from "../../firebase/realTimeFunctions";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { DataContext } from "../context/DataContext";
 import { useContext } from "react";
@@ -93,8 +93,6 @@ const ModalClient: React.FC = () => {
     } else setClient(DEFAULT_CLIENT);
   }, [modalClientContext]);
 
-  console.log("modalClientContext", modalClientContext);
-  console.log(client);
 
   return (
     <div>
@@ -270,7 +268,7 @@ const ModalClient: React.FC = () => {
               {!modalClientContext?.selectedRow ? (
                 <Button
                   onClick={() => {
-                    writeUserData(client);
+                    writeUserDataClient(client);
                     modalClientContext.setOpen(false);
                   }}
                   variant="contained"
@@ -282,7 +280,7 @@ const ModalClient: React.FC = () => {
               ) : (
                 <Button
                   onClick={() => {
-                    writeUserData(client);
+                    writeUserDataClient(client);
                     modalClientContext.setOpen(false);
                   }}
                   variant="contained"

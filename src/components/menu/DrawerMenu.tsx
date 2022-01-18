@@ -16,13 +16,13 @@ import Clientes from "../clientes/Clientes";
 import Nota from "../nota/Nota";
 import { DataContext } from "../context/DataContext";
 import { useContext } from "react";
+import ViewNota from "../nota/ViewNota";
 
 const drawerWidth = 240;
 
 export default function DrawerMenu() {
   const modalClientContext: any = useContext(DataContext);
 
-  console.log(modalClientContext.menuName);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -51,21 +51,23 @@ export default function DrawerMenu() {
         <Toolbar />
         <Divider />
         <List>
-          {["Clientes", "Nota", "Nota de Serviço"].map((text, index) => (
-            <ListItem
-              button
-              key={text}
-              onClick={() => {
-                modalClientContext.setMenuName([index, text]);
-                modalClientContext.setSelectedRow(undefined);
-              }}
-            >
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {["Clientes", "Gerar Nota", "Relatorio de Notas"].map(
+            (text, index) => (
+              <ListItem
+                button
+                key={text}
+                onClick={() => {
+                  modalClientContext.setMenuName([index, text]);
+                  modalClientContext.setSelectedRow(undefined);
+                }}
+              >
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            )
+          )}
         </List>
       </Drawer>
       <Box
@@ -77,9 +79,11 @@ export default function DrawerMenu() {
           <Clientes />
         ) : modalClientContext.menuName[0] === 1 ? (
           <Nota />
+        ) : modalClientContext.menuName[0] === 2 ? (
+          <ViewNota />
         ) : (
           <></>
-        )}{" "}
+        )}
       </Box>
     </Box>
   );

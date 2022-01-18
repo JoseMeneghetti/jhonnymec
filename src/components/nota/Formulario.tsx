@@ -1,14 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import { Button, Divider, TextField } from "@mui/material";
+import { Divider, TextField } from "@mui/material";
 import { useEffect } from "react";
-import { writeUserData } from "../../firebase/realTimeFunctions";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { DataContext } from "../context/DataContext";
 import { useContext } from "react";
 import { Nota } from "../typings/global";
+import InputAdornment from "@mui/material/InputAdornment";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,35 +32,26 @@ const useStyles = makeStyles(() =>
 );
 
 const style = {
-  width: "70%",
+  width: "50%",
   heigth: "auto",
   margin: "auto",
+  boxShadow:
+    "rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px",
+  padding: "30px",
+  borderRadius: "10px",
 };
 
 type FormularioProps = {
   nota: Nota;
   setNota: React.Dispatch<React.SetStateAction<any>>;
+  DEFAULT_NOTA: Nota;
 };
 
-
-const DEFAULT_CLIENT = {
-  nome: "",
-  documento: "",
-  email: "",
-  telefone: "",
-  cep: "",
-  logradouro: "",
-  numero: "",
-  bairro: "",
-  cidade: "",
-  uf: "",
-  id: "",
-  marca: "",
-  modelo: "",
-  ano: "",
-};
-
-const Formulario: React.FC<FormularioProps> = ({ nota, setNota }) => {
+const Formulario: React.FC<FormularioProps> = ({
+  nota,
+  setNota,
+  DEFAULT_NOTA,
+}) => {
   const modalClientContext: any = useContext(DataContext);
 
   const classes = useStyles();
@@ -69,16 +59,31 @@ const Formulario: React.FC<FormularioProps> = ({ nota, setNota }) => {
   useEffect(() => {
     if (modalClientContext?.selectedRow) {
       setNota(modalClientContext?.selectedRow);
-    } else setNota(DEFAULT_CLIENT);
+    } else setNota(DEFAULT_NOTA);
   }, [modalClientContext]);
 
+  useEffect(() => {
+    if (nota.id) {
+      setNota({ ...nota, clientId: nota.id });
+    }
+  }, [nota.id]);
+
+  useEffect(() => {
+    if (nota?.valorServico?.length || nota?.valorProduto?.length) {
+      setNota({
+        ...nota,
+        valorTotal: Number(nota.valorProduto) + Number(nota.valorServico),
+      });
+    }
+  }, [nota.valorProduto, nota.valorServico]);
+
+  console.log(nota, "nota");
   return (
     <div>
       <Box component="form" sx={style as any} noValidate autoComplete="off">
         <Typography id="modal-modal-title" variant="h4" component="h4">
-          Nota de Servico
+          Nota de Serviço
         </Typography>
-        <Divider />
         <div className={`${classes.container}`}>
           <div className={`${classes.divStyle}`}>
             <TextField
@@ -130,10 +135,10 @@ const Formulario: React.FC<FormularioProps> = ({ nota, setNota }) => {
               }}
             />
           </div>
-          <Typography id="modal-modal-title" variant="h6" component="h6">
-            Cadastro de Endereco
-          </Typography>
           <Divider />
+          <Typography id="modal-modal-title" variant="h6" component="h6">
+            Cadastro de Endereço
+          </Typography>
           <div className={`${classes.divStyle}`}>
             <TextField
               className={`${classes.inputs}`}
@@ -199,10 +204,11 @@ const Formulario: React.FC<FormularioProps> = ({ nota, setNota }) => {
               }}
             />
           </div>
+          <Divider />
+
           <Typography id="modal-modal-title" variant="h6" component="h6">
             Especificações do Carro
           </Typography>
-          <Divider />
 
           <div className={`${classes.divStyle}`}>
             <TextField
@@ -233,6 +239,82 @@ const Formulario: React.FC<FormularioProps> = ({ nota, setNota }) => {
               value={nota.ano}
               onChange={(event) => {
                 setNota({ ...nota, ano: event.target.value });
+              }}
+            />
+            <TextField
+              className={`${classes.inputs}`}
+              required
+              id="outlined-required"
+              label="Km"
+              value={nota.km}
+              onChange={(event) => {
+                setNota({ ...nota, km: event.target.value });
+              }}
+            />
+            <TextField
+              className={`${classes.inputs}`}
+              required
+              id="outlined-required"
+              label="Detalhes"
+              value={nota.detalhes}
+              onChange={(event) => {
+                setNota({ ...nota, detalhes: event.target.value });
+              }}
+            />
+          </div>
+          <Divider />
+          <Typography id="modal-modal-title" variant="h6" component="h6">
+            Serviços e Produtos
+          </Typography>
+          <div className={`${classes.divStyle}`}>
+            <TextField
+              className={`${classes.inputs}`}
+              required
+              id="outlined-required"
+              label="Valor dos Serviços"
+              type="number"
+              value={nota.valorServico}
+              onChange={(event) => {
+                setNota({ ...nota, valorServico: event.target.value });
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">R$</InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              className={`${classes.inputs}`}
+              required
+              id="outlined-required"
+              label="Valor de Peças/Produtos"
+              type="number"
+              value={nota.valorProduto}
+              onChange={(event) => {
+                setNota({ ...nota, valorProduto: event.target.value });
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">R$</InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <Divider />
+          <Typography id="modal-modal-title" variant="h6" component="h6">
+            Descrição dos Serviços Prestados
+          </Typography>
+          <div className={`${classes.divStyle}`}>
+            <TextField
+              className={`${classes.inputs}`}
+              required
+              fullWidth
+              id="outlined-required"
+              label="Serviços Prestados"
+              type="text"
+              value={nota.servicosPrestados}
+              onChange={(event) => {
+                setNota({ ...nota, servicosPrestados: event.target.value });
               }}
             />
           </div>

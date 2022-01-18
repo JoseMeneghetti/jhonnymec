@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Formulario from "./Formulario";
+import { writeUserDataNota } from "../../firebase/realTimeFunctions";
 
 const sx = {
   position: "absolute" as "absolute",
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DEFAULT_CLIENT = {
+const DEFAULT_NOTA = {
   nome: "",
   documento: "",
   email: "",
@@ -37,21 +38,36 @@ const DEFAULT_CLIENT = {
   cidade: "",
   uf: "",
   id: "",
+  clientId: "",
+  data: "",
   marca: "",
   modelo: "",
   ano: "",
+  km: "",
+  detalhes: "",
+  valorServico: "",
+  valorProduto: "",
+  valorTotal: "",
+  servicosPrestados: "",
 };
 
 const Nota: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [nota, setNota] = React.useState(DEFAULT_CLIENT);
+  const [nota, setNota] = React.useState(DEFAULT_NOTA);
 
   return (
     <div>
-      <Formulario nota={nota} setNota={setNota}/>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Formulario nota={nota} setNota={setNota} DEFAULT_NOTA={DEFAULT_NOTA} />
+      <Button
+        onClick={() => {
+          writeUserDataNota(nota, setNota);
+          handleOpen();
+        }}
+      >
+        Open modal
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}

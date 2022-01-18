@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   textNormal: {
     fontSize: 12,
-    color: "grey",
+    color: "#525252",
     fontWeight: "normal",
     marginBottom: "5px",
     fontFamily: "roboto",
@@ -51,7 +51,7 @@ const ClientPdf: React.FC<ClientPdfProps> = ({nota}) => {
   return (
     <>
       <View style={styles.clientViewBorder}>
-        <Text style={styles.title}>DADOS DO CLIENTE</Text>
+        <Text style={styles.title}>SERVICOS E PRODUTOS</Text>
         <View style={styles.viewHeader}>
           <View style={styles.viewColumn}>
             <Text style={styles.textBold}>
@@ -60,7 +60,7 @@ const ClientPdf: React.FC<ClientPdfProps> = ({nota}) => {
             </Text>
             <Text style={styles.textBold}>
               Endereco:
-              <Text style={styles.textNormal}>{nota.logradouro}, {nota.numero}</Text>
+              <Text style={styles.textNormal}> {nota.logradouro}, {nota.numero}</Text>
             </Text>
             <Text style={styles.textBold}>
               Cidade:

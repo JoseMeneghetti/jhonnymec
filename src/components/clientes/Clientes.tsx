@@ -1,7 +1,7 @@
 import * as React from "react";
 import AddClient from "./AddClient";
 import { useEffect, useContext } from "react";
-import { firebaseGetDocs } from "../../firebase/realTimeFunctions";
+import { firebaseGetDocsClient } from "../../firebase/realTimeFunctions";
 import { DataGrid, GridColumns, GridRenderCellParams } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
@@ -74,7 +74,7 @@ export default function Clientes() {
   ];
 
   useEffect(() => {
-    firebaseGetDocs(setTableClient);
+    firebaseGetDocsClient(setTableClient);
   }, [modalClientContext.open]);
 
   return (
@@ -85,6 +85,7 @@ export default function Clientes() {
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
+          density='comfortable'
         />
       ) : (
         <Stack spacing={1}>
