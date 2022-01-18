@@ -1,17 +1,17 @@
 import * as React from "react";
 import AddClient from "./AddClient";
 import { useEffect, useContext } from "react";
-import { firebaseGetDocs } from "../../firebase/realTimeFunctions";
+import { firebaseGetDocsClient } from "../../firebase/realTimeFunctions";
 import { DataGrid, GridColumns, GridRenderCellParams } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import PreviewIcon from "@mui/icons-material/Preview";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import { Skeleton, Stack } from "@mui/material";
-import { ModalClientContext } from "./context/modalContext";
+import { DataContext } from "../context/DataContext";
 
 export default function Clientes() {
-  const modalClientContext: any = useContext(ModalClientContext);
+  const modalClientContext: any = useContext(DataContext);
 
   const [tableClient, setTableClient] = React.useState<any>(undefined);
 
@@ -21,6 +21,10 @@ export default function Clientes() {
   }
   function handleClickWhatsApp(telefone: number) {
     window.open(`https://wa.me/55${telefone}`);
+  }
+  function handleClickNota(rowData: any) {
+    modalClientContext.setSelectedRow(rowData);
+    modalClientContext.setMenuName([1, "Nota"]);
   }
   function renderRating(params: GridRenderCellParams) {
     return (
@@ -49,6 +53,8 @@ export default function Clientes() {
           color="primary"
           aria-label="upload picture"
           component="span"
+          onClick={() => handleClickNota(params.row)}
+
         >
           <LocalAtmIcon color="secondary" />
         </IconButton>
@@ -68,7 +74,7 @@ export default function Clientes() {
   ];
 
   useEffect(() => {
-    firebaseGetDocs(setTableClient);
+    firebaseGetDocsClient(setTableClient);
   }, [modalClientContext.open]);
 
   return (
@@ -79,6 +85,7 @@ export default function Clientes() {
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
+          density='comfortable'
         />
       ) : (
         <Stack spacing={1}>

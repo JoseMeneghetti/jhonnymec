@@ -4,15 +4,19 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Button, Divider, TextField } from "@mui/material";
 import { useEffect } from "react";
-import { writeUserData } from "../../firebase/realTimeFunctions";
+import { writeUserDataClient } from "../../firebase/realTimeFunctions";
 import { createStyles, makeStyles } from "@material-ui/styles";
-import { ModalClientContext } from "./context/modalContext";
+import { DataContext } from "../context/DataContext";
 import { useContext } from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 
 const useStyles = makeStyles(() =>
   createStyles({
+    container: {
+      display: "flex",
+      flexDirection: "column",
+    },
     divStyle: {
       display: "flex",
       flexWrap: "wrap",
@@ -20,6 +24,11 @@ const useStyles = makeStyles(() =>
     },
     inputs: {
       marginBottom: "10px",
+      marginTop: "10px",
+    },
+    divButtons: {
+      display: "flex",
+      justifyContent: "center",
     },
   })
 );
@@ -50,10 +59,13 @@ const DEFAULT_CLIENT = {
   cidade: "",
   uf: "",
   id: "",
+  marca: "",
+  modelo: "",
+  ano: "",
 };
 
 const ModalClient: React.FC = () => {
-  const modalClientContext: any = useContext(ModalClientContext);
+  const modalClientContext: any = useContext(DataContext);
 
   const classes = useStyles();
   const handleClose = () => modalClientContext.setOpen(false);
@@ -81,8 +93,6 @@ const ModalClient: React.FC = () => {
     } else setClient(DEFAULT_CLIENT);
   }, [modalClientContext]);
 
-  console.log("modalClientContext", modalClientContext);
-  console.log(client);
 
   return (
     <div>
@@ -93,127 +103,172 @@ const ModalClient: React.FC = () => {
         aria-describedby="modal-modal-description"
       >
         <Box component="form" sx={style as any} noValidate autoComplete="off">
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h4" component="h4">
             Cadastro de Cliente
           </Typography>
           <Divider />
-          <div className={`${classes.divStyle}`}>
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              fullWidth
-              id="outlined-required"
-              label="Nome"
-              value={client.nome}
-              onChange={(event) => {
-                setClient({ ...client, nome: event.target.value });
-              }}
-            />
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              id="outlined-required"
-              type="number"
-              label="CPF/CNPJ"
-              value={client.documento}
-              onChange={(event) => {
-                setClient({
-                  ...client,
-                  documento: event.target.value,
-                  id: event.target.value,
-                });
-              }}
-            />
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              id="outlined-required"
-              type="email"
-              label="E-mail"
-              value={client.email}
-              onChange={(event) => {
-                setClient({ ...client, email: event.target.value });
-              }}
-            />
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              id="outlined-required"
-              label="Telefone"
-              type="tel"
-              value={client.telefone}
-              onChange={(event) => {
-                setClient({ ...client, telefone: event.target.value });
-              }}
-            />
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              id="outlined-required"
-              label="CEP"
-              value={client.cep}
-              onChange={(event) => {
-                setClient({ ...client, cep: event.target.value });
-              }}
-            />
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              id="outlined-required"
-              label="Rua"
-              value={client.logradouro}
-              onChange={(event) => {
-                setClient({ ...client, logradouro: event.target.value });
-              }}
-            />
+          <div className={`${classes.container}`}>
+            <div className={`${classes.divStyle}`}>
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                fullWidth
+                id="outlined-required"
+                label="Nome"
+                value={client.nome}
+                onChange={(event) => {
+                  setClient({ ...client, nome: event.target.value });
+                }}
+              />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                type="number"
+                label="CPF/CNPJ"
+                value={client.documento}
+                onChange={(event) => {
+                  setClient({
+                    ...client,
+                    documento: event.target.value,
+                    id: event.target.value,
+                  });
+                }}
+              />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                type="email"
+                label="E-mail"
+                value={client.email}
+                onChange={(event) => {
+                  setClient({ ...client, email: event.target.value });
+                }}
+              />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Telefone"
+                type="tel"
+                value={client.telefone}
+                onChange={(event) => {
+                  setClient({ ...client, telefone: event.target.value });
+                }}
+              />
+            </div>
+            <Typography id="modal-modal-title" variant="h6" component="h6">
+              Cadastro de Endereco
+            </Typography>
+            <Divider />
+            <div className={`${classes.divStyle}`}>
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="CEP"
+                value={client.cep}
+                onChange={(event) => {
+                  setClient({ ...client, cep: event.target.value });
+                }}
+              />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Rua"
+                value={client.logradouro}
+                onChange={(event) => {
+                  setClient({ ...client, logradouro: event.target.value });
+                }}
+              />
 
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              id="outlined-required"
-              label="Numero"
-              type="number"
-              value={client.numero}
-              onChange={(event) => {
-                setClient({ ...client, numero: event.target.value });
-              }}
-            />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Numero"
+                type="number"
+                value={client.numero}
+                onChange={(event) => {
+                  setClient({ ...client, numero: event.target.value });
+                }}
+              />
 
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              id="outlined-required"
-              label="Bairro"
-              value={client.bairro}
-              onChange={(event) => {
-                setClient({ ...client, bairro: event.target.value });
-              }}
-            />
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              id="outlined-required"
-              label="Cidade"
-              value={client.cidade}
-              onChange={(event) => {
-                setClient({ ...client, cidade: event.target.value });
-              }}
-            />
-            <TextField
-              className={`${classes.inputs}`}
-              required
-              id="outlined-required"
-              label="Estado"
-              value={client.uf}
-              onChange={(event) => {
-                setClient({ ...client, uf: event.target.value });
-              }}
-            />
-            <div>
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Bairro"
+                value={client.bairro}
+                onChange={(event) => {
+                  setClient({ ...client, bairro: event.target.value });
+                }}
+              />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Cidade"
+                value={client.cidade}
+                onChange={(event) => {
+                  setClient({ ...client, cidade: event.target.value });
+                }}
+              />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Estado"
+                value={client.uf}
+                onChange={(event) => {
+                  setClient({ ...client, uf: event.target.value });
+                }}
+              />
+            </div>
+            <Typography id="modal-modal-title" variant="h6" component="h6">
+              Especificações do Carro
+            </Typography>
+            <Divider />
+
+            <div className={`${classes.divStyle}`}>
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Marca"
+                value={client.marca}
+                onChange={(event) => {
+                  setClient({ ...client, marca: event.target.value });
+                }}
+              />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Modelo"
+                value={client.modelo}
+                onChange={(event) => {
+                  setClient({ ...client, modelo: event.target.value });
+                }}
+              />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Ano"
+                value={client.ano}
+                onChange={(event) => {
+                  setClient({ ...client, ano: event.target.value });
+                }}
+              />
+            </div>
+            <div className={`${classes.divButtons}`}>
               {!modalClientContext?.selectedRow ? (
                 <Button
                   onClick={() => {
-                    writeUserData(client);
+                    writeUserDataClient(client);
                     modalClientContext.setOpen(false);
                   }}
                   variant="contained"
@@ -225,7 +280,7 @@ const ModalClient: React.FC = () => {
               ) : (
                 <Button
                   onClick={() => {
-                    writeUserData(client);
+                    writeUserDataClient(client);
                     modalClientContext.setOpen(false);
                   }}
                   variant="contained"
