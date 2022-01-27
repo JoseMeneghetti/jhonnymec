@@ -81,6 +81,7 @@ export default function Clientes() {
   const columns: GridColumns = [
     { field: "nome", headerName: "Nome", width: 250 },
     { field: "telefone", headerName: "Telefone", width: 130 },
+    { field: "modelo", headerName: "Carro", width: 200 },
     {
       field: "actions",
       headerName: "Ver/WhatsApp/Nota",
