@@ -118,9 +118,6 @@ const ModalClient: React.FC = () => {
     }
   }, [modalClientContext]);
 
-  console.log(
-    parseInt(client.documento.replace(/[^0-9]/g, "")).toString().length
-  );
   return (
     <div>
       <Modal
