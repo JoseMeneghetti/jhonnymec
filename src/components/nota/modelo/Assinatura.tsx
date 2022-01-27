@@ -30,7 +30,7 @@ const Assinatura: React.FC = () => {
     <>
       <View style={styles.viewRow}>
         <Text style={styles.textNormal}>Jhonny MEC</Text>
-        <Text style={styles.textNormal}>XX.XXX.XXX/0001-0</Text>
+        <Text style={styles.textNormal}>44.910.343/0001-69</Text>
         <Text style={styles.underline}>Responsabilidade Técnica</Text>
       </View>
     </>
