@@ -10,6 +10,11 @@ import { DataContext } from "../context/DataContext";
 import { useContext } from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
+import InputMask from "react-input-mask";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -23,12 +28,17 @@ const useStyles = makeStyles(() =>
       justifyContent: "space-between",
     },
     inputs: {
-      marginBottom: "10px",
-      marginTop: "10px",
+      marginBottom: "10px!important",
+      marginTop: "10px!important",
     },
     divButtons: {
       display: "flex",
       justifyContent: "center",
+    },
+    divCpf: {
+      display: `flex`,
+      flexDirection: `column`,
+      alignItems: `center`,
     },
   })
 );
@@ -71,6 +81,11 @@ const ModalClient: React.FC = () => {
   const classes = useStyles();
   const handleClose = () => modalClientContext.setOpen(false);
   const [client, setClient] = React.useState(DEFAULT_CLIENT);
+  const [cpfCpnj, setCpfCpnj] = React.useState("cpf");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCpfCpnj((event.target as HTMLInputElement).value);
+  };
 
   useEffect(() => {
     if (!modalClientContext?.selectedRow && client.cep.length === 8) {
@@ -94,7 +109,18 @@ const ModalClient: React.FC = () => {
     } else setClient(DEFAULT_CLIENT);
   }, [modalClientContext]);
 
+  useEffect(() => {
+    if (modalClientContext?.selectedRow?.documento) {
+      const tamanho = parseInt(
+        modalClientContext?.selectedRow?.documento.replace(/[^0-9]/g, "")
+      ).toString().length;
+      setCpfCpnj(tamanho > 11 ? "cnpj" : "cpf");
+    }
+  }, [modalClientContext]);
 
+  console.log(
+    parseInt(client.documento.replace(/[^0-9]/g, "")).toString().length
+  );
   return (
     <div>
       <Modal
@@ -110,7 +136,6 @@ const ModalClient: React.FC = () => {
           <Divider />
           <div className={`${classes.container}`}>
             <div className={`${classes.divStyle}`}>
-
               <TextField
                 className={`${classes.inputs}`}
                 required
@@ -122,21 +147,39 @@ const ModalClient: React.FC = () => {
                   setClient({ ...client, nome: event.target.value });
                 }}
               />
-            <InputMask mask="99/99/9999" value={props.value} onChange={props.onChange}>
-              {(inputProps) => <MaterialInput {...inputProps} type="tel" disableUnderline />}
-            </InputMask>
+              <div className={`${classes.divCpf}`}>
+                <FormLabel id="demo-controlled-radio-buttons-group">
+                  Pessoa Fisica Ou Juridica?
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-controlled-radio-buttons-group"
+                  name="controlled-radio-buttons-group"
+                  value={cpfCpnj}
+                  onChange={handleChange}
+                >
+                  <FormControlLabel
+                    value="cpf"
+                    control={<Radio />}
+                    label="CPF"
+                  />
+                  <FormControlLabel
+                    value="cnpj"
+                    control={<Radio />}
+                    label="CNPJ"
+                  />
+                </RadioGroup>
+              </div>
+
               <TextField
                 className={`${classes.inputs}`}
                 required
                 id="outlined-required"
-                type="number"
-                label="CPF/CNPJ"
-                value={client.documento}
+                label="Telefone"
+                type="tel"
+                value={client.telefone}
                 onChange={(event) => {
-                  setClient({
-                    ...client,
-                    documento: event.target.value,
-                  });
+                  setClient({ ...client, telefone: event.target.value });
                 }}
               />
               <TextField
@@ -150,17 +193,28 @@ const ModalClient: React.FC = () => {
                   setClient({ ...client, email: event.target.value });
                 }}
               />
-              <TextField
-                className={`${classes.inputs}`}
-                required
-                id="outlined-required"
-                label="Telefone"
-                type="tel"
-                value={client.telefone}
+
+              <InputMask
+                mask={
+                  cpfCpnj === "cnpj" ? "99.999.999/9999-99" : "999.999.999-99"
+                }
+                value={client.documento}
                 onChange={(event) => {
-                  setClient({ ...client, telefone: event.target.value });
+                  setClient({
+                    ...client,
+                    documento: event.target.value,
+                  });
                 }}
-              />
+              >
+                {() => (
+                  <TextField
+                    className={`${classes.inputs}`}
+                    required
+                    id="outlined-required"
+                    label={cpfCpnj === "cpf" ? "CPF" : "CNPJ"}
+                  />
+                )}
+              </InputMask>
             </div>
             <Typography id="modal-modal-title" variant="h6" component="h6">
               Cadastro de Endereco
