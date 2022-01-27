@@ -80,6 +80,7 @@ export default function ViewNota() {
     { field: "id", headerName: "Nº da Nota", width: 150 },
     { field: "nome", headerName: "Cliente", width: 250 },
     { field: "data", headerName: "Data", width: 130 },
+    { field: "modelo", headerName: "Carro", width: 200 },
     {
       field: "actions",
       headerName: "Ver Nota",
