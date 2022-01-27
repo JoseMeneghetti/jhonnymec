@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import DrawerMenu from './components/menu/DrawerMenu.tsx';
 import reportWebVitals from './reportWebVitals';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -9,12 +8,24 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { AuthProvider } from "./firebase/authContext";
 import { DataProvider } from "./components/context/DataContext";
+import PersistentDrawerLeft from './components/menu/PersistentDrawerLeft';
+import { ThemeProvider } from "@material-ui/styles";
+import { createTheme } from "@material-ui/core/styles";
+
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+/>;
+
+const theme = createTheme();
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
       <DataProvider>
-        <DrawerMenu />
+        <ThemeProvider theme={theme}>
+          <PersistentDrawerLeft />
+        </ThemeProvider>
       </DataProvider>
     </AuthProvider>
   </React.StrictMode>,

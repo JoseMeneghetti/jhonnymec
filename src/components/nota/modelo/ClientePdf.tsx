@@ -51,7 +51,7 @@ const ClientPdf: React.FC<ClientPdfProps> = ({nota}) => {
   return (
     <>
       <View style={styles.clientViewBorder}>
-        <Text style={styles.title}>SERVICOS E PRODUTOS</Text>
+        <Text style={styles.title}>DADOS DO CLIENTE</Text>
         <View style={styles.viewHeader}>
           <View style={styles.viewColumn}>
             <Text style={styles.textBold}>

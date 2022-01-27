@@ -1,10 +1,12 @@
 import './App.css';
-import DrawerMenu from './components/menu/DrawerMenu';
+// import DrawerMenu from './components/menu/DrawerMenu';
+import PersistentDrawerLeft from './components/menu/PersistentDrawerLeft';
 
 function App() {
   return (
-<DrawerMenu/>
-  );
+    /* <DrawerMenu/> */
+    <PersistentDrawerLeft />
+  )
 }
 
 export default App;

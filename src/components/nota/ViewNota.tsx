@@ -10,6 +10,8 @@ import { StyleSheet, PDFViewer } from "@react-pdf/renderer";
 import { MyDocument } from "./modelo/Document";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { Theme } from "@material-ui/core";
 
 const sx = {
   position: "absolute" as "absolute",
@@ -30,8 +32,22 @@ const styles = StyleSheet.create({
   },
 });
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    drawerWidth: {
+      height: 400,
+      width: "60%",
+      margin: "auto",
+      [theme.breakpoints.down(1400)]: {
+        width: "100%",
+      },
+    },
+  })
+);
+
 export default function ViewNota() {
   const modalClientContext: any = useContext(DataContext);
+  const classes = useStyles();
 
   const [tableNota, setTableNota] = React.useState<any>(undefined);
   const [selectedRowNota, setSelectedRowNota] = React.useState<any>(undefined);
@@ -77,7 +93,7 @@ export default function ViewNota() {
   }, [modalClientContext.open]);
 
   return (
-    <div style={{ height: 400, width: "50%", margin: "auto" }}>
+    <div className={classes.drawerWidth}>
       {tableNota ? (
         <DataGrid
           rows={Object.values(tableNota)}

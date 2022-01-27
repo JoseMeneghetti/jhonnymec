@@ -26,7 +26,33 @@ export function firebaseGetDocsNotas(setTableNota) {
 
 export function writeUserDataClient(client) {
   const db = getDatabase();
-  set(ref(db, 'users/' + client.id), client);
+  const dbRef = ref(getDatabase());
+
+  get(child(dbRef, `users/`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      const result = snapshot.val()
+
+      let id = Object.keys(result).reduce(function (a, b) {
+        return Math.max(a, b);
+      });
+
+      id++
+
+      client.id = id
+
+      const data = new Date();
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = data.getFullYear();
+      const dataAtual = dia + '/' + mes + '/' + ano;
+
+      client.data = dataAtual
+
+      set(ref(db, 'users/' + id), client);
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
 }
 
 export function writeUserDataNota(nota, setNota) {
@@ -37,7 +63,11 @@ export function writeUserDataNota(nota, setNota) {
     if (snapshot.exists()) {
       const result = snapshot.val()
 
-      const id = Object.keys(result) ? Object.keys(result).length + 1 : 0
+      let id = Object.keys(result).reduce(function (a, b) {
+        return Math.max(a, b);
+      });
+
+      id++
 
       nota.id = id
 

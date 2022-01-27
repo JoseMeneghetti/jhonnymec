@@ -12,7 +12,6 @@ export const AuthProvider: React.FC = ({children} ) => {
 
     const auth = getAuth();
     const [user, setUser] = useState<any>(undefined)
-    console.log(user)
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {

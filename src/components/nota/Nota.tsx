@@ -59,6 +59,7 @@ const Nota: React.FC = () => {
 
   return (
     <div>
+      <Box component="form" noValidate autoComplete="off"></Box>
       <Formulario nota={nota} setNota={setNota} DEFAULT_NOTA={DEFAULT_NOTA} />
       <Button
         onClick={() => {
@@ -66,7 +67,7 @@ const Nota: React.FC = () => {
           handleOpen();
         }}
       >
-        Open modal
+        Registrar NOTA
       </Button>
       <Modal
         open={open}

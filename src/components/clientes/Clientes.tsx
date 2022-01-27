@@ -9,9 +9,25 @@ import PreviewIcon from "@mui/icons-material/Preview";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import { Skeleton, Stack } from "@mui/material";
 import { DataContext } from "../context/DataContext";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { Theme } from "@material-ui/core";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    drawerWidth: {
+      height: 500,
+      width: "60%",
+      margin: "auto",
+      [theme.breakpoints.down(1400)]: {
+        width: "100%",
+      },
+    },
+  })
+);
 
 export default function Clientes() {
   const modalClientContext: any = useContext(DataContext);
+  const classes = useStyles();
 
   const [tableClient, setTableClient] = React.useState<any>(undefined);
 
@@ -74,11 +90,13 @@ export default function Clientes() {
   ];
 
   useEffect(() => {
-    firebaseGetDocsClient(setTableClient);
+    setTimeout(() => {
+      firebaseGetDocsClient(setTableClient);
+    }, 1500);
   }, [modalClientContext.open]);
 
   return (
-    <div style={{ height: 400, width: "50%", margin: "auto" }}>
+    <div className={classes.drawerWidth}>
       {tableClient ? (
         <DataGrid
           rows={Object.values(tableClient)}

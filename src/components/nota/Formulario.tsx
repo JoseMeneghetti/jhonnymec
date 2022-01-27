@@ -8,8 +8,9 @@ import { DataContext } from "../context/DataContext";
 import { useContext } from "react";
 import { Nota } from "../typings/global";
 import InputAdornment from "@mui/material/InputAdornment";
+import { Theme } from "@material-ui/core";
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: "flex",
@@ -28,18 +29,20 @@ const useStyles = makeStyles(() =>
       display: "flex",
       justifyContent: "center",
     },
+    formContainer: {
+      width: "50%",
+      heigth: "auto",
+      margin: "auto",
+      boxShadow:
+        "rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px",
+      padding: "30px",
+      borderRadius: "10px",
+      [theme.breakpoints.down(1400)]: {
+        width: "100%",
+      },
+    },
   })
 );
-
-const style = {
-  width: "50%",
-  heigth: "auto",
-  margin: "auto",
-  boxShadow:
-    "rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px",
-  padding: "30px",
-  borderRadius: "10px",
-};
 
 type FormularioProps = {
   nota: Nota;
@@ -77,10 +80,14 @@ const Formulario: React.FC<FormularioProps> = ({
     }
   }, [nota.valorProduto, nota.valorServico]);
 
-  console.log(nota, "nota");
   return (
     <div>
-      <Box component="form" sx={style as any} noValidate autoComplete="off">
+      <Box
+        component="form"
+        className={classes.formContainer}
+        noValidate
+        autoComplete="off"
+      >
         <Typography id="modal-modal-title" variant="h4" component="h4">
           Nota de Serviço
         </Typography>

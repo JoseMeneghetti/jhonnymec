@@ -62,6 +62,7 @@ const DEFAULT_CLIENT = {
   marca: "",
   modelo: "",
   ano: "",
+  data: "",
 };
 
 const ModalClient: React.FC = () => {
@@ -131,7 +132,6 @@ const ModalClient: React.FC = () => {
                   setClient({
                     ...client,
                     documento: event.target.value,
-                    id: event.target.value,
                   });
                 }}
               />
