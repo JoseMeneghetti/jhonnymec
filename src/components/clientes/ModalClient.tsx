@@ -110,6 +110,7 @@ const ModalClient: React.FC = () => {
           <Divider />
           <div className={`${classes.container}`}>
             <div className={`${classes.divStyle}`}>
+
               <TextField
                 className={`${classes.inputs}`}
                 required
@@ -121,6 +122,9 @@ const ModalClient: React.FC = () => {
                   setClient({ ...client, nome: event.target.value });
                 }}
               />
+            <InputMask mask="99/99/9999" value={props.value} onChange={props.onChange}>
+              {(inputProps) => <MaterialInput {...inputProps} type="tel" disableUnderline />}
+            </InputMask>
               <TextField
                 className={`${classes.inputs}`}
                 required
