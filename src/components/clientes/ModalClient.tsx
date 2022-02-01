@@ -15,8 +15,11 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
+import CarroForm from "./CarroForm";
+import IconButton from "@mui/material/IconButton";
+import { Theme } from "@material-ui/core";
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: "flex",
@@ -34,28 +37,33 @@ const useStyles = makeStyles(() =>
     divButtons: {
       display: "flex",
       justifyContent: "center",
+      marginTop: "15px",
     },
     divCpf: {
       display: `flex`,
       flexDirection: `column`,
       alignItems: `center`,
     },
+    style: {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "50%",
+      backgroundColor: "white",
+      border: "2px solid #000",
+      boxShadow: "24px",
+      padding: "20px",
+      display: "flex",
+      flexWrap: "wrap",
+      overflow: "auto",
+      maxHeight: "-webkit-fill-available",
+      [theme.breakpoints.down(1400)]: {
+        width: "90%",
+      },
+    },
   })
 );
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "40%",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  display: "flex",
-  flexWrap: "wrap",
-};
 
 const DEFAULT_CLIENT = {
   nome: "",
@@ -69,26 +77,42 @@ const DEFAULT_CLIENT = {
   cidade: "",
   uf: "",
   id: "",
+  data: "",
   marca: "",
   modelo: "",
   ano: "",
-  data: "",
+  carros: [],
 };
 
 const ModalClient: React.FC = () => {
   const modalClientContext: any = useContext(DataContext);
-
   const classes = useStyles();
   const handleClose = () => modalClientContext.setOpen(false);
   const [client, setClient] = React.useState(DEFAULT_CLIENT);
   const [cpfCpnj, setCpfCpnj] = React.useState("cpf");
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCpfCpnj((event.target as HTMLInputElement).value);
   };
 
+  function handleAddCarro() {
+    const clonedData: any = { ...client };
+    if (!clonedData.carros) {
+      clonedData.carros = [];
+    }
+    clonedData.carros.push({
+      marca: client.marca,
+      modelo: client.modelo,
+      ano: client.ano,
+    });
+    clonedData.marca = "";
+    clonedData.modelo = "";
+    clonedData.ano = "";
+
+    setClient(clonedData);
+  }
+
   useEffect(() => {
-    if (!modalClientContext?.selectedRow && client.cep.length === 8) {
+    if (!modalClientContext?.selectedRow && client?.cep?.length === 8) {
       fetch(`https://viacep.com.br/ws/${client.cep}/json/`)
         .then((response) => response.json())
         .then((data) =>
@@ -126,7 +150,12 @@ const ModalClient: React.FC = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box component="form" sx={style as any} noValidate autoComplete="off">
+        <Box
+          component="form"
+          className={`${classes.style}`}
+          noValidate
+          autoComplete="off"
+        >
           <Typography id="modal-modal-title" variant="h4" component="h4">
             Cadastro de Cliente
           </Typography>
@@ -167,7 +196,27 @@ const ModalClient: React.FC = () => {
                   />
                 </RadioGroup>
               </div>
-
+              <InputMask
+                mask={
+                  cpfCpnj === "cnpj" ? "99.999.999/9999-99" : "999.999.999-99"
+                }
+                value={client.documento}
+                onChange={(event) => {
+                  setClient({
+                    ...client,
+                    documento: event.target.value,
+                  });
+                }}
+              >
+                {() => (
+                  <TextField
+                    className={`${classes.inputs}`}
+                    required
+                    id="outlined-required"
+                    label={cpfCpnj === "cpf" ? "CPF" : "CNPJ"}
+                  />
+                )}
+              </InputMask>
               <TextField
                 className={`${classes.inputs}`}
                 required
@@ -190,28 +239,6 @@ const ModalClient: React.FC = () => {
                   setClient({ ...client, email: event.target.value });
                 }}
               />
-
-              <InputMask
-                mask={
-                  cpfCpnj === "cnpj" ? "99.999.999/9999-99" : "999.999.999-99"
-                }
-                value={client.documento}
-                onChange={(event) => {
-                  setClient({
-                    ...client,
-                    documento: event.target.value,
-                  });
-                }}
-              >
-                {() => (
-                  <TextField
-                    className={`${classes.inputs}`}
-                    required
-                    id="outlined-required"
-                    label={cpfCpnj === "cpf" ? "CPF" : "CNPJ"}
-                  />
-                )}
-              </InputMask>
             </div>
             <Typography id="modal-modal-title" variant="h6" component="h6">
               Cadastro de Endereco
@@ -286,8 +313,8 @@ const ModalClient: React.FC = () => {
               Especificações do Carro
             </Typography>
             <Divider />
-
             <div className={`${classes.divStyle}`}>
+              <CarroForm client={client} setClient={setClient} />
               <TextField
                 className={`${classes.inputs}`}
                 required
@@ -318,13 +345,26 @@ const ModalClient: React.FC = () => {
                   setClient({ ...client, ano: event.target.value });
                 }}
               />
+              <IconButton
+                color="success"
+                aria-label="sucesso"
+                component="span"
+                onClick={() => handleAddCarro()}
+              >
+                <CheckIcon />
+              </IconButton>
             </div>
+            <Divider />
             <div className={`${classes.divButtons}`}>
               {!modalClientContext?.selectedRow ? (
                 <Button
                   onClick={() => {
-                    writeUserDataClient(client);
-                    modalClientContext.setOpen(false);
+                    if (!client?.carros[0] || !client.nome) {
+                      alert("Prencha ao menos o nome e/ou adicione 1 carro no minimo");
+                    } else {
+                      writeUserDataClient(client);
+                      modalClientContext.setOpen(false);
+                    }
                   }}
                   variant="contained"
                   color="success"

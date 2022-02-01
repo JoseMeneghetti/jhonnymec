@@ -1,3 +1,8 @@
+export type Carros = {
+  marca: string;
+  modelo: string;
+  ano: string;
+};
 export type Nota = {
   nome: String;
   documento: String;
@@ -21,4 +26,5 @@ export type Nota = {
   valorProduto: String;
   valorTotal: String;
   servicosPrestados: String;
+  carros: Carros[];
 };

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Text, View, StyleSheet } from "@react-pdf/renderer";
-import { padding } from "@material-ui/system";
 import { Nota } from "../../typings/global";
 
 const styles = StyleSheet.create({
@@ -45,7 +44,7 @@ const ServicoPrestado: React.FC<ServicoPrestadoProps> = ({ nota }) => {
   return (
     <>
       <View style={styles.clientViewBorder}>
-        <Text style={styles.title}>ESPECIFICACAO DOS SERVICOS PRESTADOS</Text>
+        <Text style={styles.title}>ESPECIFICACAO DOS SERVIÇOS PRESTADOS</Text>
         <View style={styles.viewHeader}>
           <View style={styles.viewRow}>
             <Text style={styles.textNormal}>{nota.servicosPrestados}</Text>

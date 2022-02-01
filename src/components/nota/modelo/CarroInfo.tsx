@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Text, View, StyleSheet } from "@react-pdf/renderer";
-import { padding } from "@material-ui/system";
 import { Nota } from "../../typings/global";
 
 const styles = StyleSheet.create({
