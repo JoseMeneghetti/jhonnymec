@@ -1,8 +1,14 @@
 import * as React from "react";
 import { useEffect, useContext } from "react";
 import { firebaseGetDocsNotas } from "../../firebase/realTimeFunctions";
-import { DataGrid, GridColumns, GridRenderCellParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColumns,
+  GridRenderCellParams,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
+import CancelIcon from "@mui/icons-material/Cancel";
 import PreviewIcon from "@mui/icons-material/Preview";
 import { Skeleton, Stack } from "@mui/material";
 import { DataContext } from "../context/DataContext";
@@ -12,18 +18,6 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Theme } from "@material-ui/core";
-
-const sx = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "70%",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const styles = StyleSheet.create({
   viewer: {
@@ -38,6 +32,25 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 400,
       width: "60%",
       margin: "auto",
+      overflow: "auto",
+      maxHeight: "-webkit-fill-available",
+      [theme.breakpoints.down(1400)]: {
+        width: "100%",
+      },
+    },
+    sx: {
+      display: "flex",
+      alignItems: "flex-end",
+      flexDirection: "column",
+      position: "absolute" as "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "70%",
+      backgroundColor: "white",
+      border: "2px solid #000",
+      overflow: "auto",
+      maxHeight: "-webkit-fill-available",
       [theme.breakpoints.down(1400)]: {
         width: "100%",
       },
@@ -80,7 +93,14 @@ export default function ViewNota() {
     { field: "id", headerName: "Nº da Nota", width: 150 },
     { field: "nome", headerName: "Cliente", width: 250 },
     { field: "data", headerName: "Data", width: 130 },
-    { field: "modelo", headerName: "Carro", width: 200 },
+    {
+      field: "carro",
+      headerName: "carro",
+      valueGetter: (params: GridValueGetterParams<any>) => {
+        return `${params?.row?.marca} ${params?.row?.modelo} - ${params?.row?.ano}`;
+      },
+      width: 250,
+    },
     {
       field: "actions",
       headerName: "Ver Nota",
@@ -115,7 +135,15 @@ export default function ViewNota() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={sx}>
+        <Box className={classes.sx}>
+          <IconButton
+            color="default"
+            aria-label="close"
+            component="span"
+            onClick={() => handleClose()}
+          >
+            <CancelIcon />
+          </IconButton>
           <PDFViewer style={styles.viewer}>
             {MyDocument(selectedRowNota)}
           </PDFViewer>

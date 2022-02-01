@@ -72,7 +72,7 @@ type HeaderProps = {
 const HeaderPdf: React.FC<HeaderProps> = ({ nota }) => {
   return (
     <>
-      <Text style={styles.title}>REGISTRO DE ORDEM DE SERVICO</Text>
+      <Text style={styles.title}>REGISTRO DE ORDEM DE SERVIÇO PROVISÓRIO</Text>
       <View style={styles.viewHeader}>
         <View style={styles.viewColumn}>
           <Image source={Logo} style={styles.logo} />

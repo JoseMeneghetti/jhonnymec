@@ -14,7 +14,7 @@ export const DataContext = createContext<any>(DEFAULT_VALUE);
 export const DataProvider: React.FC = ({ children }) => {
   const [selectedRow, setSelectedRow] = useState(DEFAULT_VALUE.selectedRow);
   const [open, setOpen] = useState(DEFAULT_VALUE.open);
-  const [menuName, setMenuName] = useState(DEFAULT_VALUE.open);
+  const [menuName, setMenuName] = useState(DEFAULT_VALUE.menuName);
 
   return (
     <DataContext.Provider
