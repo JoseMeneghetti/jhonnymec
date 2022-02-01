@@ -143,6 +143,7 @@ export default function PersistentDrawerLeft() {
                 button
                 key={text}
                 onClick={() => {
+                  handleDrawerClose()
                   modalClientContext.setMenuName([index, text]);
                   modalClientContext.setSelectedRow(undefined);
                 }}

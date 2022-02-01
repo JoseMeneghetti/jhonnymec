@@ -13,7 +13,7 @@ import { fireBaseSignInWithEmailAndPassword } from "../../firebase/authFunctions
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import { Theme } from "@material-ui/core";
-
+import logo from "../nota/modelo/assets/JHonny.png";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,13 +33,12 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(
-        3
-      )}`,
+      padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)}`,
     },
     avatar: {
       margin: theme.spacing(),
-      backgroundColor: theme.palette.secondary.main,
+      width: 100,
+      height: 100,
     },
     form: {
       width: "100%", // Fix IE 11 issue.
@@ -70,65 +69,69 @@ const Login: React.FC = () => {
 
   return (
     // <ThemeProvider theme={theme}>
-      <main className={classes.main}>
-        <CssBaseline />
-        <Paper className={classes.paper}>
-          <Avatar className={classes.avatar}></Avatar>
-          <Typography component="h1" variant="h5">
-            Вход
-          </Typography>
-          <form className={classes.form}>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input
-                id="email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEmail(e.target.value)
-                }
-                onFocus={() => erroLogin && setErroLogin(false)}
-              />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                name="password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setPassword(e.target.value)
-                }
-                onFocus={() => erroLogin && setErroLogin(false)}
-              />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+    <main className={classes.main}>
+      <CssBaseline />
+      <Paper className={classes.paper}>
+        <Avatar
+          src={logo}
+          className={classes.avatar}
+          variant="rounded"
+        ></Avatar>
+        <Typography component="h1" variant="h5">
+          LOGIN
+        </Typography>
+        <form className={classes.form}>
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="email">Email</InputLabel>
+            <Input
+              id="email"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
+              onFocus={() => erroLogin && setErroLogin(false)}
             />
-            <div>
-              {erroLogin && (
-                <Alert onClose={() => setErroLogin(false)} severity="error">
-                  Usuario ou Senha invalidos!
-                </Alert>
-              )}
-            </div>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={() => handleLogin()}
-            >
-              Sign in
-            </Button>
-          </form>
-        </Paper>
-      </main>
+          </FormControl>
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="password">Senha</InputLabel>
+            <Input
+              name="password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
+              onFocus={() => erroLogin && setErroLogin(false)}
+            />
+          </FormControl>
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Lembre-me"
+          />
+          <div>
+            {erroLogin && (
+              <Alert onClose={() => setErroLogin(false)} severity="error">
+                Usuario ou Senha invalidos!
+              </Alert>
+            )}
+          </div>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={() => handleLogin()}
+          >
+            Entrar
+          </Button>
+        </form>
+      </Paper>
+    </main>
     // </ThemeProvider>
   );
 };
