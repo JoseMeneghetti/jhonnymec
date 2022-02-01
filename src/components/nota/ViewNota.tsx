@@ -1,21 +1,41 @@
 import * as React from "react";
-import AddClient from "./AddClient";
 import { useEffect, useContext } from "react";
-import { firebaseGetDocsClient } from "../../firebase/realTimeFunctions";
+import { firebaseGetDocsNotas } from "../../firebase/realTimeFunctions";
 import { DataGrid, GridColumns, GridRenderCellParams } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import PreviewIcon from "@mui/icons-material/Preview";
-import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import { Skeleton, Stack } from "@mui/material";
 import { DataContext } from "../context/DataContext";
+import { StyleSheet, PDFViewer } from "@react-pdf/renderer";
+import { MyDocument } from "./modelo/Document";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Theme } from "@material-ui/core";
+
+const sx = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "70%",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
+const styles = StyleSheet.create({
+  viewer: {
+    width: "100%",
+    height: "700px",
+  },
+});
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     drawerWidth: {
-      height: 500,
+      height: 400,
       width: "60%",
       margin: "auto",
       [theme.breakpoints.down(1400)]: {
@@ -25,23 +45,22 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Clientes() {
+export default function ViewNota() {
   const modalClientContext: any = useContext(DataContext);
   const classes = useStyles();
 
-  const [tableClient, setTableClient] = React.useState<any>(undefined);
+  const [tableNota, setTableNota] = React.useState<any>(undefined);
+  const [selectedRowNota, setSelectedRowNota] = React.useState<any>(undefined);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   function handleClickView(rowData: any) {
-    modalClientContext.setSelectedRow(rowData);
-    modalClientContext.setOpen(true);
+    setSelectedRowNota(rowData);
+    handleOpen();
   }
-  function handleClickWhatsApp(telefone: number) {
-    window.open(`https://wa.me/55${telefone}`);
-  }
-  function handleClickNota(rowData: any) {
-    modalClientContext.setSelectedRow(rowData);
-    modalClientContext.setMenuName([1, "Nota"]);
-  }
+
   function renderRating(params: GridRenderCellParams) {
     return (
       <div>
@@ -53,58 +72,36 @@ export default function Clientes() {
         >
           <PreviewIcon color="action" />
         </IconButton>
-        {params?.row?.telefone ? (
-          <IconButton
-            color="success"
-            aria-label="upload picture"
-            component="span"
-            onClick={() => handleClickWhatsApp(params?.row?.telefone)}
-          >
-            <WhatsAppIcon color="success" />
-          </IconButton>
-        ) : (
-          <></>
-        )}
-        <IconButton
-          color="primary"
-          aria-label="upload picture"
-          component="span"
-          onClick={() => handleClickNota(params.row)}
-
-        >
-          <LocalAtmIcon color="secondary" />
-        </IconButton>
       </div>
     );
   }
 
   const columns: GridColumns = [
-    { field: "nome", headerName: "Nome", width: 250 },
-    { field: "telefone", headerName: "Telefone", width: 130 },
+    { field: "id", headerName: "Nº da Nota", width: 150 },
+    { field: "nome", headerName: "Cliente", width: 250 },
+    { field: "data", headerName: "Data", width: 130 },
     { field: "modelo", headerName: "Carro", width: 200 },
     {
       field: "actions",
-      headerName: "Ver/WhatsApp/Nota",
+      headerName: "Ver Nota",
       renderCell: (params: GridRenderCellParams<any>) => renderRating(params),
-      width: 180,
+      width: 100,
     },
   ];
 
   useEffect(() => {
-    setTimeout(() => {
-      firebaseGetDocsClient(setTableClient);
-    }, 1500);
+    firebaseGetDocsNotas(setTableNota);
   }, [modalClientContext.open]);
 
   return (
     <div className={classes.drawerWidth}>
-      {tableClient ? (
+      {tableNota ? (
         <DataGrid
-          rows={Object.values(tableClient)}
+          rows={Object.values(tableNota)}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
-          density='comfortable'
+          density="comfortable"
         />
       ) : (
         <Stack spacing={1}>
@@ -112,7 +109,18 @@ export default function Clientes() {
           <Skeleton variant="rectangular" width={800} height={400} />
         </Stack>
       )}
-      <AddClient />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={sx}>
+          <PDFViewer style={styles.viewer}>
+            {MyDocument(selectedRowNota)}
+          </PDFViewer>
+        </Box>
+      </Modal>
     </div>
   );
 }

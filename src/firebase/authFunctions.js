@@ -32,7 +32,6 @@ export const fireBaseSignInWithEmailAndPassword = async (email, password) => {
 export const firebaseSignOut = async () => {
   const auth = getAuth();
   await signOut(auth).then(() => {
-    console.log("deslogou");
   }).catch((error) => {
     console.log(error)
   });
