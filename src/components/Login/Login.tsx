@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControl from "@mui/material/FormControl";
@@ -12,48 +11,49 @@ import Typography from "@mui/material/Typography";
 import { fireBaseSignInWithEmailAndPassword } from "../../firebase/authFunctions";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
-import { Theme } from "@material-ui/core";
 import logo from "../nota/modelo/assets/JHonny.png";
+import Box from "@mui/material/Box";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    main: {
-      width: "auto",
-      display: "block", // Fix IE 11 issue.
-      marginLeft: theme.spacing(3),
-      marginRight: theme.spacing(3),
-      [theme.breakpoints.up("md")]: {
-        width: 400,
-        marginLeft: "auto",
-        marginRight: "auto",
-      },
+const styles = {
+  main: {
+    width: {
+      xs: "auto",
+      md: 400,
     },
-    paper: {
-      marginTop: theme.spacing(8),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)}`,
+    display: "block", // Fix IE 11 issue.
+    marginRight: {
+      xs: 3,
+      md: "auto",
     },
-    avatar: {
-      margin: theme.spacing(),
-      width: "100px!important",
-      height: "100px!important",
+    marginLeft: {
+      xs: 3,
+      md: "auto",
     },
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(),
-    },
-    submit: {
-      marginTop: theme.spacing(3),
-    },
-  })
-);
+  },
+  paper: {
+    marginTop: 8,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    p: 3,
+  },
+  avatar: {
+    margin: 1,
+    width: "100px!important",
+    height: "100px!important",
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: 1,
+  },
+  submit: {
+    marginTop: 3,
+  },
+};
 
 // const theme = createTheme();
 
 const Login: React.FC = () => {
-  const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [erroLogin, setErroLogin] = useState(false);
@@ -69,18 +69,18 @@ const Login: React.FC = () => {
 
   return (
     // <ThemeProvider theme={theme}>
-    <main className={classes.main}>
+    <Box sx={styles.main}>
       <CssBaseline />
-      <Paper className={classes.paper}>
+      <Paper sx={styles.paper}>
         <Avatar
           src={logo}
-          className={classes.avatar}
+          sx={styles.avatar}
           variant="rounded"
         ></Avatar>
         <Typography component="h1" variant="h5">
           LOGIN
         </Typography>
-        <form className={classes.form}>
+        <FormControl sx={styles.form}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email</InputLabel>
             <Input
@@ -124,14 +124,14 @@ const Login: React.FC = () => {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            sx={styles.submit}
             onClick={() => handleLogin()}
           >
             Entrar
           </Button>
-        </form>
+        </FormControl>
       </Paper>
-    </main>
+    </Box>
     // </ThemeProvider>
   );
 };
