@@ -20,6 +20,7 @@ export type Nota = {
   marca: string;
   modelo: string;
   ano: string;
+  placa: string;
   km: string;
   detalhes: string;
   valorServico: string;

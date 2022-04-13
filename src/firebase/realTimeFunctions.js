@@ -64,7 +64,6 @@ export function writeUserDataClient(client) {
 
 export function writeUserDataNota(nota, setNota, cancelada) {
   debugger
-  console.log(cancelada,  'cancelada')
   const db = getDatabase();
   const dbRef = ref(getDatabase());
 
@@ -73,7 +72,6 @@ export function writeUserDataNota(nota, setNota, cancelada) {
   const mes = String(data.getMonth() + 1).padStart(2, '0');
   const ano = data.getFullYear();
   const dataAtual = dia + '/' + mes + '/' + ano;
-  console.log(nota, 'nota')
   
   let id = 0
 

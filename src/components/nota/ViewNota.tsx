@@ -99,7 +99,6 @@ export default function ViewNota() {
 
   useEffect(() => {
     if (openYesOrNoCancelAlert?.condition === "sim") {
-      console.log("ae");
       writeUserDataNota(cancelRow, _, true);
       setOpenYesOrNoCancelAlert({
         ...openYesOrNoCancelAlert,
@@ -162,7 +161,6 @@ export default function ViewNota() {
   useEffect(() => {
     firebaseGetDocsNotas(setTableNota);
   }, [modalClientContext.open]);
-  console.log(openYesOrNoCancelAlert);
   return (
     <div className={classes.drawerWidth}>
       {openYesOrNoCancelAlert && (

@@ -76,6 +76,7 @@ const DEFAULT_NOTA = {
   marca: "",
   modelo: "",
   ano: "",
+  placa: "",
   km: "",
   carros: [],
   detalhes: "",
