@@ -74,10 +74,10 @@ const Formulario: React.FC<FormularioProps> = ({
         marca: selectedCar.marca,
         modelo: selectedCar.modelo,
         ano: selectedCar.ano,
+        placa: selectedCar.placa
       });
     }
   }, [selectedCar]);
-  console.log(nota)
   return (
     <div>
       <Typography id="modal-modal-title" variant="h4" component="h4">
@@ -254,6 +254,17 @@ const Formulario: React.FC<FormularioProps> = ({
             value={nota.ano}
             onChange={(event) => {
               setNota({ ...nota, ano: event.target.value });
+            }}
+          />
+          <TextField
+            className={`${classes.inputs}`}
+            required
+            disabled
+            id="outlined-required"
+            label="Placa"
+            value={nota.placa}
+            onChange={(event) => {
+              setNota({ ...nota, placa: event.target.value });
             }}
           />
           <TextField

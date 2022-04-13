@@ -82,6 +82,7 @@ const DEFAULT_CLIENT = {
   marca: "",
   modelo: "",
   ano: "",
+  placa: '',
   carros: [],
 };
 
@@ -346,6 +347,16 @@ const ModalClient: React.FC = () => {
                 value={client.ano}
                 onChange={(event) => {
                   setClient({ ...client, ano: event.target.value });
+                }}
+              />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Placa"
+                value={client.placa}
+                onChange={(event) => {
+                  setClient({ ...client, placa: event.target.value });
                 }}
               />
               <IconButton

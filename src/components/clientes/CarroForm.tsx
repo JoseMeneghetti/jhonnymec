@@ -93,6 +93,17 @@ const CarroForm: React.FC<CarroFormProps> = ({ client, setClient }) => {
                   handleChange(event, index);
                 }}
               />
+              <TextField
+                className={`${classes.inputs}`}
+                required
+                id="outlined-required"
+                label="Placa"
+                name={"placa"}
+                value={client.carros[index]?.placa}
+                onChange={(event) => {
+                  handleChange(event, index);
+                }}
+              />
               <IconButton
                 color="error"
                 aria-label="exclude"
