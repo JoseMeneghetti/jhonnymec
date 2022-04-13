@@ -9,6 +9,7 @@ import { writeUserDataNota } from "../../firebase/realTimeFunctions";
 import CheckIcon from "@mui/icons-material/Check";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Theme } from "@material-ui/core";
+import CustomAlert from "../utils/CustomAlert/CustomAlert";
 
 const styles = StyleSheet.create({
   viewer: {
@@ -90,6 +91,7 @@ const Nota: React.FC = () => {
   const handleClose = () => setOpen(false);
   const [nota, setNota] = React.useState(DEFAULT_NOTA);
   const classes = useStyles();
+  const [openAlertFail, setOpenAlertFail] = React.useState(false);
 
   return (
     <Box component="form" autoComplete="off" className={classes.formContainer}>
@@ -97,7 +99,7 @@ const Nota: React.FC = () => {
       <Button
         onClick={() => {
           if (!nota.valorTotal || !nota.modelo) {
-            alert("Prencha todos os campos");
+            setOpenAlertFail(true);
           } else {
             writeUserDataNota(nota, setNota);
             handleOpen();
@@ -119,6 +121,16 @@ const Nota: React.FC = () => {
           <PDFViewer style={styles.viewer}>{MyDocument(nota)}</PDFViewer>
         </Box>
       </Modal>
+      {openAlertFail && (
+        <CustomAlert
+          severity={"error"}
+          color={"error"}
+          setOpenAlert={setOpenAlertFail}
+          openAlert={openAlertFail}
+          text={"Prencha todos os campos!"}
+          title={"Falha!"}
+        />
+      )}
     </Box>
   );
 };

@@ -51,15 +51,12 @@ const Formulario: React.FC<FormularioProps> = ({
 
   useEffect(() => {
     if (modalClientContext?.selectedRow) {
-      setNota(modalClientContext?.selectedRow);
+      let data = modalClientContext?.selectedRow
+      data.clientId = data.id
+      data.id = ''
+      setNota(data);
     } else setNota(DEFAULT_NOTA);
   }, [modalClientContext]);
-
-  useEffect(() => {
-    if (nota.id) {
-      setNota({ ...nota, clientId: nota.id });
-    }
-  }, [nota.id]);
 
   useEffect(() => {
     if (nota?.valorServico?.length || nota?.valorProduto?.length) {
@@ -80,7 +77,7 @@ const Formulario: React.FC<FormularioProps> = ({
       });
     }
   }, [selectedCar]);
-
+  console.log(nota)
   return (
     <div>
       <Typography id="modal-modal-title" variant="h4" component="h4">

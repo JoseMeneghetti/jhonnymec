@@ -18,6 +18,7 @@ import FormLabel from "@mui/material/FormLabel";
 import CarroForm from "./CarroForm";
 import IconButton from "@mui/material/IconButton";
 import { Theme } from "@material-ui/core";
+import CustomAlert from "../utils/CustomAlert/CustomAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -90,6 +91,8 @@ const ModalClient: React.FC = () => {
   const handleClose = () => modalClientContext.setOpen(false);
   const [client, setClient] = React.useState(DEFAULT_CLIENT);
   const [cpfCpnj, setCpfCpnj] = React.useState("cpf");
+  const [openAlertSucesso, setOpenAlertSucesso] = React.useState(false);
+  const [openAlertFail, setOpenAlertFail] = React.useState(false);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCpfCpnj((event.target as HTMLInputElement).value);
   };
@@ -360,10 +363,11 @@ const ModalClient: React.FC = () => {
                 <Button
                   onClick={() => {
                     if (!client?.carros[0] || !client.nome) {
-                      alert("Prencha ao menos o nome e/ou adicione 1 carro no minimo");
+                      setOpenAlertFail(true);
                     } else {
                       writeUserDataClient(client);
                       modalClientContext.setOpen(false);
+                      setOpenAlertSucesso(true);
                     }
                   }}
                   variant="contained"
@@ -377,6 +381,7 @@ const ModalClient: React.FC = () => {
                   onClick={() => {
                     writeUserDataClient(client);
                     modalClientContext.setOpen(false);
+                    setOpenAlertSucesso(true);
                   }}
                   variant="contained"
                   color="warning"
@@ -387,8 +392,28 @@ const ModalClient: React.FC = () => {
               )}
             </div>
           </div>
+          {openAlertFail && (
+            <CustomAlert
+              severity={"error"}
+              color={"error"}
+              setOpenAlert={setOpenAlertFail}
+              openAlert={openAlertFail}
+              text={"Prencha ao menos o nome e/ou adicione 1 carro no minimo!"}
+              title={"Falha!"}
+            />
+          )}
         </Box>
       </Modal>
+      {openAlertSucesso && (
+        <CustomAlert
+          severity={"success"}
+          color={"success"}
+          setOpenAlert={setOpenAlertSucesso}
+          openAlert={openAlertSucesso}
+          text={"Cadastro efetuado com Sucesso!"}
+          title={"Sucesso!"}
+        />
+      )}
     </div>
   );
 };
