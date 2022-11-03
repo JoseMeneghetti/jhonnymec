@@ -37,6 +37,7 @@ type FormularioProps = {
   setNota: React.Dispatch<React.SetStateAction<any>>;
   DEFAULT_NOTA: Nota;
 };
+
 const Formulario: React.FC<FormularioProps> = ({
   nota,
   setNota,
@@ -78,6 +79,8 @@ const Formulario: React.FC<FormularioProps> = ({
       });
     }
   }, [selectedCar]);
+
+  console.log(nota)
   return (
     <div>
       <Typography id="modal-modal-title" variant="h4" component="h4">
@@ -210,7 +213,7 @@ const Formulario: React.FC<FormularioProps> = ({
         {nota.carros ? (
           <Autocomplete
             options={nota.carros}
-            getOptionLabel={(option) => `${option.marca} ${option.modelo} - ${option.ano}`}
+            getOptionLabel={(option) => `${option.marca} ${option.modelo} - ${option.ano} - ${option.placa}`}
             id="combo-box-demo"
             renderInput={(params) => <TextField {...params} />}
             value={selectedCar}

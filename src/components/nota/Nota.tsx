@@ -78,7 +78,7 @@ const DEFAULT_NOTA = {
   ano: "",
   placa: "",
   km: "",
-  carros: [],
+  carros: [{ placa: "", marca: "", modelo: "", ano: "" }],
   detalhes: "",
   valorServico: "",
   valorProduto: "",
@@ -99,7 +99,7 @@ const Nota: React.FC = () => {
       <Formulario nota={nota} setNota={setNota} DEFAULT_NOTA={DEFAULT_NOTA} />
       <Button
         onClick={() => {
-          if (!nota.valorTotal || !nota.modelo) {
+          if (!nota.valorTotal || !nota.modelo || !nota.carros[0].placa) {
             setOpenAlertFail(true);
           } else {
             writeUserDataNota(nota, setNota);

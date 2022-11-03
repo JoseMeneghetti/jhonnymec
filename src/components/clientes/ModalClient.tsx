@@ -107,10 +107,12 @@ const ModalClient: React.FC = () => {
       marca: client.marca,
       modelo: client.modelo,
       ano: client.ano,
+      placa: client.placa,
     });
     clonedData.marca = "";
     clonedData.modelo = "";
     clonedData.ano = "";
+    clonedData.placa = "";
 
     setClient(clonedData);
   }

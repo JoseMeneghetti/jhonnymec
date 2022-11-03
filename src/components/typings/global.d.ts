@@ -2,6 +2,7 @@ export type Carros = {
   marca: string;
   modelo: string;
   ano: string;
+  placa: string;
 };
 export type Nota = {
   nome: string;

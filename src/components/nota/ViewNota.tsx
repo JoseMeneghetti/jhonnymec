@@ -190,6 +190,11 @@ export default function ViewNota() {
           pageSize={5}
           rowsPerPageOptions={[5]}
           density="comfortable"
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'id', sort: 'desc' }],
+            },
+          }}
         />
       ) : (
         <Stack spacing={1}>

@@ -83,6 +83,7 @@ export default function Clientes() {
   }
 
   const columns: GridColumns = [
+    { field: "id", headerName: "Nº", width: 75 },
     { field: "nome", headerName: "Nome", width: 250 },
     { field: "telefone", headerName: "Telefone", width: 130 },
     {
@@ -116,6 +117,11 @@ export default function Clientes() {
           pageSize={5}
           rowsPerPageOptions={[5]}
           density="comfortable"
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'id', sort: 'desc' }],
+            },
+          }}
         />
       ) : (
         <Stack spacing={1}>

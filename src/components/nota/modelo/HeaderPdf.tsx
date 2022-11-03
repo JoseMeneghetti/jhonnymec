@@ -82,7 +82,7 @@ const HeaderPdf: React.FC<HeaderProps> = ({ nota }) => {
           <Text style={styles.textTitle}>Jhonny Mec Oficina Mecanica</Text>
           <Text style={styles.textNormal}>CNPJ: 44.910.343/0001-69</Text>
           <Text style={styles.textNormal}>
-            (11) 4411-0414 - (11) 97428-2586
+            (11) 4411-0414 - (11) 97297-5485
           </Text>
           <Text style={styles.textNormal}>falecomjhonnymec@gmail.com</Text>
           <Text style={styles.textNormalAdress}>
