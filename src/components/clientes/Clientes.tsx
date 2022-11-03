@@ -2,7 +2,12 @@ import * as React from "react";
 import AddClient from "./AddClient";
 import { useEffect, useContext } from "react";
 import { firebaseGetDocsClient } from "../../firebase/realTimeFunctions";
-import { DataGrid, GridColumns, GridRenderCellParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColumns,
+  GridRenderCellParams,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import PreviewIcon from "@mui/icons-material/Preview";
@@ -70,7 +75,6 @@ export default function Clientes() {
           aria-label="upload picture"
           component="span"
           onClick={() => handleClickNota(params.row)}
-
         >
           <LocalAtmIcon color="secondary" />
         </IconButton>
@@ -79,9 +83,17 @@ export default function Clientes() {
   }
 
   const columns: GridColumns = [
+    { field: "id", headerName: "Nº", width: 75 },
     { field: "nome", headerName: "Nome", width: 250 },
     { field: "telefone", headerName: "Telefone", width: 130 },
-    { field: "modelo", headerName: "Carro", width: 200 },
+    {
+      field: "carro",
+      headerName: "carro",
+      valueGetter: (params: GridValueGetterParams<any>) => {
+        return `${params?.row?.carros[0]?.marca} ${params?.row?.carros[0]?.modelo} - ${params?.row?.carros[0]?.ano}`;
+      },
+      width: 250,
+    },
     {
       field: "actions",
       headerName: "Ver/WhatsApp/Nota",
@@ -104,7 +116,12 @@ export default function Clientes() {
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
-          density='comfortable'
+          density="comfortable"
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'id', sort: 'desc' }],
+            },
+          }}
         />
       ) : (
         <Stack spacing={1}>

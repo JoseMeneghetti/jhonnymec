@@ -6,18 +6,10 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Formulario from "./Formulario";
 import { writeUserDataNota } from "../../firebase/realTimeFunctions";
-
-const sx = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "70%",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import CheckIcon from "@mui/icons-material/Check";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { Theme } from "@material-ui/core";
+import CustomAlert from "../utils/CustomAlert/CustomAlert";
 
 const styles = StyleSheet.create({
   viewer: {
@@ -25,6 +17,47 @@ const styles = StyleSheet.create({
     height: "700px",
   },
 });
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    drawerWidth: {
+      height: 400,
+      width: "60%",
+      margin: "auto",
+      overflow: "auto",
+      maxHeight: "-webkit-fill-available",
+      [theme.breakpoints.down(1400)]: {
+        width: "100%",
+      },
+    },
+    sx: {
+      position: "absolute" as "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "70%",
+      backgroundColor: "white",
+      border: "2px solid #000",
+      overflow: "auto",
+      maxHeight: "-webkit-fill-available",
+      [theme.breakpoints.down(1400)]: {
+        width: "100%",
+      },
+    },
+    formContainer: {
+      width: "50%",
+      heigth: "auto",
+      margin: "auto",
+      boxShadow:
+        "rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px",
+      padding: "30px",
+      borderRadius: "10px",
+      [theme.breakpoints.down(1400)]: {
+        width: "100%",
+      },
+    },
+  })
+);
 
 const DEFAULT_NOTA = {
   nome: "",
@@ -43,7 +76,9 @@ const DEFAULT_NOTA = {
   marca: "",
   modelo: "",
   ano: "",
+  placa: "",
   km: "",
+  carros: [{ placa: "", marca: "", modelo: "", ano: "" }],
   detalhes: "",
   valorServico: "",
   valorProduto: "",
@@ -56,18 +91,26 @@ const Nota: React.FC = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [nota, setNota] = React.useState(DEFAULT_NOTA);
+  const classes = useStyles();
+  const [openAlertFail, setOpenAlertFail] = React.useState(false);
 
   return (
-    <div>
-      <Box component="form" noValidate autoComplete="off"></Box>
+    <Box component="form" autoComplete="off" className={classes.formContainer}>
       <Formulario nota={nota} setNota={setNota} DEFAULT_NOTA={DEFAULT_NOTA} />
       <Button
         onClick={() => {
-          writeUserDataNota(nota, setNota);
-          handleOpen();
+          if (!nota.valorTotal || !nota.modelo || !nota.carros[0].placa) {
+            setOpenAlertFail(true);
+          } else {
+            writeUserDataNota(nota, setNota);
+            handleOpen();
+          }
         }}
+        variant="contained"
+        color="success"
+        endIcon={<CheckIcon />}
       >
-        Registrar NOTA
+        REGISTRAR NOTA
       </Button>
       <Modal
         open={open}
@@ -75,11 +118,21 @@ const Nota: React.FC = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={sx}>
+        <Box className={classes.sx}>
           <PDFViewer style={styles.viewer}>{MyDocument(nota)}</PDFViewer>
         </Box>
       </Modal>
-    </div>
+      {openAlertFail && (
+        <CustomAlert
+          severity={"error"}
+          color={"error"}
+          setOpenAlert={setOpenAlertFail}
+          openAlert={openAlertFail}
+          text={"Prencha todos os campos!"}
+          title={"Falha!"}
+        />
+      )}
+    </Box>
   );
 };
 

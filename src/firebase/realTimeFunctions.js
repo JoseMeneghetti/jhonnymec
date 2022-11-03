@@ -33,10 +33,11 @@ export function writeUserDataClient(client) {
   const mes = String(data.getMonth() + 1).padStart(2, '0');
   const ano = data.getFullYear();
   const dataAtual = dia + '/' + mes + '/' + ano;
-  client.data = dataAtual
+
   let id = 0
 
   if (client?.id !== '') {
+    client.dataAlteracao = dataAtual
     set(ref(db, 'users/' + client.id), client);
   } else {
     get(child(dbRef, `users/`)).then((snapshot) => {
@@ -50,6 +51,7 @@ export function writeUserDataClient(client) {
         id++
       }
 
+      client.data = dataAtual
       client.id = id
 
       set(ref(db, 'users/' + id), client);
@@ -60,46 +62,52 @@ export function writeUserDataClient(client) {
   }
 }
 
-export function writeUserDataNota(nota, setNota) {
+export function writeUserDataNota(nota, setNota, cancelada) {
+  debugger
   const db = getDatabase();
   const dbRef = ref(getDatabase());
+
+  const data = new Date();
+  const dia = String(data.getDate()).padStart(2, '0');
+  const mes = String(data.getMonth() + 1).padStart(2, '0');
+  const ano = data.getFullYear();
+  const dataAtual = dia + '/' + mes + '/' + ano;
+  
   let id = 0
 
-  get(child(dbRef, `notas/`)).then((snapshot) => {
-
-
-    if (snapshot.exists()) {
-      const result = snapshot.val()
-
-      id = Object.keys(result).reduce(function (a, b) {
-        return Math.max(a, b);
-      });
-      id++
+  if (nota?.id !== '') {
+    if (cancelada) {
+      nota.status = 'cancelada'
     }
+    nota.dataAlteracao = dataAtual
+    set(ref(db, 'notas/' + nota.id), nota);
+  } else {
+    get(child(dbRef, `notas/`)).then((snapshot) => {
 
-    nota.id = id
+      if (snapshot.exists()) {
+        const result = snapshot.val()
 
-    const data = new Date();
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const ano = data.getFullYear();
-    const dataAtual = dia + '/' + mes + '/' + ano;
+        id = Object.keys(result).reduce(function (a, b) {
+          return Math.max(a, b);
+        });
+        id++
+      }
 
-    setNota({ ...nota, id: id, data: dataAtual })
+      nota.status = "ativa"
+      nota.id = id
+      nota.data = dataAtual
 
-    nota.data = dataAtual
+      setNota({ ...nota, id: id, data: dataAtual })
 
-    set(ref(db, 'notas/' + id), nota);
+      set(ref(db, 'notas/' + id), nota);
 
-  }).catch((error) => {
-    console.error(error);
-  });
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  }
 
 }
-
-
-
-
 
 
 
